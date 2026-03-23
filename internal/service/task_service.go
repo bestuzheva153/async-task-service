@@ -1,9 +1,9 @@
 package service
 
 import (
-	"awesomeProject1/internal/model"
-	"awesomeProject1/internal/repository"
 	"context"
+	"github.com/bestuzheva153/async-task-service/internal/model"
+	"github.com/bestuzheva153/async-task-service/internal/repository"
 )
 
 type TaskService struct {

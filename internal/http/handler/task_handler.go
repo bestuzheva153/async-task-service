@@ -4,9 +4,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"awesomeProject1/internal/model"
-	"awesomeProject1/internal/service"
 	"github.com/gin-gonic/gin"
+
+	"github.com/bestuzheva153/async-task-service/internal/model"
+	"github.com/bestuzheva153/async-task-service/internal/service"
 )
 
 type TaskHandler struct {
@@ -33,7 +34,7 @@ func (h *TaskHandler) CreateTask(c *gin.Context) {
 		Payload: req.Payload,
 	}
 
-	if err := h.service.CreateTask(c, task); err != nil {
+	if err := h.service.CreateTask(c.Request.Context(), task); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -42,9 +43,13 @@ func (h *TaskHandler) CreateTask(c *gin.Context) {
 }
 
 func (h *TaskHandler) GetTask(c *gin.Context) {
-	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid task id"})
+		return
+	}
 
-	task, err := h.service.GetTask(c, id)
+	task, err := h.service.GetTask(c.Request.Context(), id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
 		return
@@ -54,7 +59,7 @@ func (h *TaskHandler) GetTask(c *gin.Context) {
 }
 
 func (h *TaskHandler) GetAll(c *gin.Context) {
-	tasks, err := h.service.GetAllTasks(c)
+	tasks, err := h.service.GetAllTasks(c.Request.Context())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
