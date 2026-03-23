@@ -62,6 +62,8 @@
 FOR UPDATE SKIP LOCKED
 ```
 ## Структура проекта
+
+```text
 cmd/
   app/
     main.go
@@ -76,3 +78,4 @@ internal/
   repository/
   service/
   worker/
+```
