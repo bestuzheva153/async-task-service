@@ -1,4 +1,4 @@
-module awesomeProject1
+module github.com/bestuzheva153/async-task-service
 
 go 1.25.1
 
